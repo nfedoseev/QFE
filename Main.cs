@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
@@ -22,8 +15,9 @@ namespace qfe
         public Main()
         {
             InitializeComponent();
+            this.TopMost = true;
 
-                if (!File.Exists(path))
+            if (!File.Exists(path))
                 {
                     String data = "UUDD\r\nUUEE\r\nUUWW";
                     System.IO.StreamWriter file = new System.IO.StreamWriter(path);
@@ -32,18 +26,13 @@ namespace qfe
                     file.Close();
                 }
 
-                lines = System.IO.File.ReadAllLines(path);
-
-                timer.Tick += new EventHandler(timer_Tick);
-                timer.Interval = (5000) * (1) * (1);
-                timer.Enabled = true;
-                timer.Start();
-                updateTable();
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
+            lines = System.IO.File.ReadAllLines(path);
+            
+            timer.Tick += new EventHandler(timer_Tick);
+            timer.Interval = (5000) * (1) * (1);
+            timer.Enabled = true;
+            timer.Start();
+            updateTable();
         }
 
         private void timer_Tick(object sender, EventArgs e)

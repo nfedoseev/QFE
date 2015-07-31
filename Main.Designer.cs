@@ -89,7 +89,6 @@
             this.dataGridView1.Location = new System.Drawing.Point(-40, -17);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle4.BackColor = System.Drawing.Color.BurlyWood;
@@ -109,7 +108,6 @@
             this.icao.HeaderText = "";
             this.icao.MinimumWidth = 53;
             this.icao.Name = "icao";
-            this.icao.ReadOnly = true;
             this.icao.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.icao.Width = 53;
             // 
@@ -120,7 +118,6 @@
             this.wind.HeaderText = "";
             this.wind.MinimumWidth = 40;
             this.wind.Name = "wind";
-            this.wind.ReadOnly = true;
             this.wind.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.wind.Width = 40;
             // 
@@ -130,7 +127,6 @@
             this.value.HeaderText = "";
             this.value.MinimumWidth = 55;
             this.value.Name = "value";
-            this.value.ReadOnly = true;
             this.value.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.value.Width = 55;
             // 
@@ -140,7 +136,6 @@
             this.tl.HeaderText = "";
             this.tl.MinimumWidth = 40;
             this.tl.Name = "tl";
-            this.tl.ReadOnly = true;
             this.tl.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.tl.Width = 40;
             // 
@@ -150,7 +145,6 @@
             this.qfe.HeaderText = "";
             this.qfe.MinimumWidth = 50;
             this.qfe.Name = "qfe";
-            this.qfe.ReadOnly = true;
             this.qfe.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.qfe.Width = 50;
             // 
@@ -159,7 +153,6 @@
             this.qnh.HeaderText = "";
             this.qnh.MinimumWidth = 50;
             this.qnh.Name = "qnh";
-            this.qnh.ReadOnly = true;
             this.qnh.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.qnh.Width = 50;
             // 

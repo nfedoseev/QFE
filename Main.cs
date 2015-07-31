@@ -1,5 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
@@ -32,25 +39,19 @@ namespace qfe
             timer.Interval = (5000) * (1) * (1);
             timer.Enabled = true;
             timer.Start();
-            updateTable();
         }
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            Thread myThread = new Thread(updateTable);
-            myThread.Start();
+            updateTable();
         }
 
         private void updateTable()
         {
-            if (this.dataGridView1.DataSource != null)
-            {
-                this.dataGridView1.DataSource = null;
-            }
-
+            this.dataGridView1.DataSource = null;
+            this.dataGridView1.Rows.Clear();
             foreach (String icao in lines)
             {
-
                 try
                 {
                     APIResponse wx = API.getWx(icao);

@@ -36,7 +36,7 @@ namespace qfe
             lines = System.IO.File.ReadAllLines(path);
             
             timer.Tick += new EventHandler(timer_Tick);
-            timer.Interval = (5000) * (1) * (1);
+            timer.Interval = (1000) * (5) * (60);
             timer.Enabled = true;
             timer.Start();
             updateTable();

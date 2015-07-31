@@ -39,6 +39,7 @@ namespace qfe
             timer.Interval = (5000) * (1) * (1);
             timer.Enabled = true;
             timer.Start();
+            updateTable();
         }
 
         private void timer_Tick(object sender, EventArgs e)

@@ -1,69 +1,160 @@
-﻿using System;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
 
 namespace qfe
 {
-    public partial class Main : Form
-    {
-        private String path = Environment.CurrentDirectory + "\\icao.txt";
-        private String[] lines;
+	public partial class Main : Form
+	{
+		//	flag to avoid 'self-DoS'
+		//
+		private bool weatherRetrivialIsInProgress;
 
-        private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+		private readonly BackgroundWorker weatherServiceBackgroundWorker;
 
-        public Main()
-        {
-            InitializeComponent();
-            this.TopMost = true;
+		public Main()
+		{
+			#region  VS internals
 
-            if (!File.Exists(path))
-                {
-                    String data = "UUDD\r\nUUEE\r\nUUWW";
-                    System.IO.StreamWriter file = new System.IO.StreamWriter(path);
-                    file.WriteLine(data);
+			InitializeComponent();
 
-                    file.Close();
-                }
+			#endregion
 
-            lines = System.IO.File.ReadAllLines(path);
-            
-            timer.Tick += new EventHandler(timer_Tick);
-            timer.Interval = (1000) * (5) * (60);
-            timer.Enabled = true;
-            timer.Start();
-            updateTable();
-        }
 
-        private void timer_Tick(object sender, EventArgs e)
-        {
-            updateTable();
-        }
+			weatherRetrivialIsInProgress = false;
+			weatherServiceBackgroundWorker = new BackgroundWorker();
 
-        private void updateTable()
-        {
-            this.dataGridView1.DataSource = null;
-            this.dataGridView1.Rows.Clear();
-            foreach (String icao in lines)
-            {
-                try
-                {
-                    APIResponse wx = API.getWx(icao);
-                    this.Text = "QFE" + " (" + wx.time + ")";
-                    this.dataGridView1.Rows.Add(wx.icao, wx.wind, wx.value, wx.tl, wx.qnh, wx.qfe);
-                }
-                catch (Exception ex)
-                {
+			SetupAndRunAsyncWorker();
+		}
 
-                }
-            }
-        }
-    }
+		private void SetupAndRunAsyncWorker()
+		{
+			weatherServiceBackgroundWorker.DoWork += WeatherServiceBackgroundWorker_DoWork;
+
+			weatherServiceBackgroundWorker.RunWorkerCompleted += WeatherServiceBackgroundWorker_RunWorkerCompleted;
+
+			SetupUpdateWeatherTimer(Configurator.IcaoCodesToMonitor);
+
+			//	run worker
+			//
+
+			UpdateTable(Configurator.IcaoCodesToMonitor);
+		}
+
+		private void SetupUpdateWeatherTimer(ICollection<string> portIcaoCodesToDisplay)
+		{
+			if (portIcaoCodesToDisplay.Count <= 0)
+			{
+				return;
+			}
+
+			var weatherUpdateTimer = new Timer
+			{
+				Interval = Configurator.UpdateIntervalInMinutes * 1000 * 60
+			};
+
+			weatherUpdateTimer.Tick += (
+				(sender, e) => Timer_Tick(portIcaoCodesToDisplay)
+				);
+
+			weatherUpdateTimer.Start();
+		}
+
+		private void Timer_Tick(IEnumerable<string> portCodes)
+		{
+			UpdateTable(portCodes);
+		}
+
+		private void UpdateTable(IEnumerable portIcaoCodesToDisplay)
+		{
+			if (weatherRetrivialIsInProgress)
+			{
+				//	current weather retrivial request is in progress,
+				//	we should avoid 'self-DoS attack'
+				//
+				return;
+			}
+
+			Text = @"Updating...";
+
+			weatherServiceBackgroundWorker.RunWorkerAsync(portIcaoCodesToDisplay);
+		}
+
+		private void WeatherServiceBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+		{
+			var portIcaoCodesArray = e.Argument as string[];
+			if (null == portIcaoCodesArray)
+			{
+				return;
+			}
+
+			weatherRetrivialIsInProgress = true;
+
+			var retVal = new WeatherInfoByPortIcaoCode(portIcaoCodesArray.Length);
+
+			foreach (var portIcaoCode in portIcaoCodesArray)
+			{
+				WeatherServiceResponse weatherInfo;
+
+				try
+				{
+					weatherInfo = WeatherService.GetWx(portIcaoCode);
+				}
+				catch
+				{
+					weatherInfo = null;
+				}
+
+				if (null == weatherInfo)
+				{
+					continue;
+				}
+
+				retVal.Add(portIcaoCode, weatherInfo);
+			}
+
+			e.Result = retVal;
+		}
+
+		private void WeatherServiceBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			weatherRetrivialIsInProgress = false;
+
+			if (e.Cancelled)
+			{
+				return;
+			}
+
+			var weatherInfos = e.Result as WeatherInfoByPortIcaoCode;
+			if (null == weatherInfos)
+			{
+				return;
+			}
+
+			dataGridView1.Rows.Clear();
+
+			string windowTitle = null;
+
+			foreach (var someWeatherInfo in weatherInfos)
+			{
+				dataGridView1.Rows.Add(
+					someWeatherInfo.Value.PortIcaoCode,
+					someWeatherInfo.Value.WindDirection,
+					someWeatherInfo.Value.WindSpeed,
+					someWeatherInfo.Value.TransitionLevel,
+					someWeatherInfo.Value.QNH,
+					someWeatherInfo.Value.QFE
+					);
+
+				if (string.IsNullOrEmpty(windowTitle))
+				{
+					windowTitle = string.Format("QFE ({0})", someWeatherInfo.Value.TakenAt);
+				}
+			}
+
+			Text = !string.IsNullOrEmpty(windowTitle) ? windowTitle : @"No any info";
+		}
+	}
 }

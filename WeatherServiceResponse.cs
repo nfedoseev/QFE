@@ -5,6 +5,7 @@ namespace qfe
 {
 	//	ReSharper disable once ClassNeverInstantiated.Global
 	//	required for serialization
+
 	public class WeatherServiceResponse
 	{
 		//	ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -30,7 +31,7 @@ namespace qfe
 
 		[JsonProperty(PropertyName = "qfe")]
 		public int QFE { get; set; }
-
-		// ReSharper restore UnusedAutoPropertyAccessor.Global
 	}
+
+	// ReSharper restore UnusedAutoPropertyAccessor.Global
 }

@@ -14,11 +14,11 @@ namespace qfe
 			}
 		}
 
-		public static int UpdateIntervalInSeconds
+		public static int UpdateIntervalInMinutes
 		{
 			get
 			{
-				return GetInt("UpdateIntervalInSeconds", 3);
+				return GetInt("UpdateIntervalInMinutes", 3);
 			}
 		}
 

@@ -52,7 +52,7 @@ namespace qfe
 
 			var weatherUpdateTimer = new Timer
 			{
-				Interval = Configurator.UpdateIntervalInSeconds * 1000 * 60
+				Interval = Configurator.UpdateIntervalInMinutes * 1000 * 60
 			};
 
 			weatherUpdateTimer.Tick += (

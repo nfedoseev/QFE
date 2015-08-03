@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("QFE")]
-[assembly: AssemblyCopyright("(c) 2015 Nikita Fedoseev")]
+[assembly: AssemblyCopyright("(c) 2015 Nikita Fedoseev, Anton Basevich")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

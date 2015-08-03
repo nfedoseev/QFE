@@ -37,6 +37,9 @@ namespace qfe
 
 			SetupUpdateWeatherTimer(Configurator.IcaoCodesToMonitor);
 
+			//	run worker
+			//
+
 			UpdateTable(Configurator.IcaoCodesToMonitor);
 		}
 
@@ -75,9 +78,6 @@ namespace qfe
 			}
 
 			Text = @"Updating...";
-
-			//	setup async worker
-			//
 
 			weatherServiceBackgroundWorker.RunWorkerAsync(portIcaoCodesToDisplay);
 		}

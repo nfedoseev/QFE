@@ -12,6 +12,8 @@ namespace qfe
 		//
 		private bool weatherRetrivialIsInProgress;
 
+		private readonly BackgroundWorker weatherServiceBackgroundWorker;
+
 		public Main()
 		{
 			#region  VS internals
@@ -22,12 +24,20 @@ namespace qfe
 
 
 			weatherRetrivialIsInProgress = false;
+			weatherServiceBackgroundWorker = new BackgroundWorker();
 
-			var portIcaoCodesToDisplay = Configurator.IcaoCodesToMonitor;
+			SetupAndRunAsyncWorker();
+		}
 
-			SetupUpdateWeatherTimer(portIcaoCodesToDisplay);
+		private void SetupAndRunAsyncWorker()
+		{
+			weatherServiceBackgroundWorker.DoWork += WeatherServiceBackgroundWorker_DoWork;
 
-			UpdateTable(portIcaoCodesToDisplay);
+			weatherServiceBackgroundWorker.RunWorkerCompleted += WeatherServiceBackgroundWorker_RunWorkerCompleted;
+
+			SetupUpdateWeatherTimer(Configurator.IcaoCodesToMonitor);
+
+			UpdateTable(Configurator.IcaoCodesToMonitor);
 		}
 
 		private void SetupUpdateWeatherTimer(ICollection<string> portIcaoCodesToDisplay)
@@ -68,12 +78,6 @@ namespace qfe
 
 			//	setup async worker
 			//
-
-			var weatherServiceBackgroundWorker = new BackgroundWorker();
-
-			weatherServiceBackgroundWorker.DoWork += WeatherServiceBackgroundWorker_DoWork;
-
-			weatherServiceBackgroundWorker.RunWorkerCompleted += WeatherServiceBackgroundWorker_RunWorkerCompleted;
 
 			weatherServiceBackgroundWorker.RunWorkerAsync(portIcaoCodesToDisplay);
 		}

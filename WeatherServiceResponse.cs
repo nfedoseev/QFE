@@ -30,6 +30,7 @@ namespace qfe
 
 		[JsonProperty(PropertyName = "qfe")]
 		public int QFE { get; set; }
+
+		// ReSharper restore UnusedAutoPropertyAccessor.Global
 	}
-	// ReSharper restore UnusedAutoPropertyAccessor.Global
 }

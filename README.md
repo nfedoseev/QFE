@@ -1,8 +1,11 @@
 # QFE
 
-![Screen of app](http://i.imgur.com/Z0Djuji.png)
+[![GitHub license](https://img.shields.io/github/license/daitel/qfe.svg)](https://github.com/daitel/qfe/blob/master/LICENSE.md)
+[![Issue](https://img.shields.io/github/issues-raw/daitel/qfe.svg)](https://github.com/daitel/qfe/issues)
 
-QFE - Application for help to virual atc. Provide some helpful information.
+QFE - Application for help with QFE. Provide some helpful information.
+
+![Screen of app](http://i.imgur.com/Z0Djuji.png)
 
 ##Current data
 * ICAO
